@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MarkMate</title>
+    <%= favicon_link_tag 'favicon-32x32.png' %>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application'%>
+    <%= javascript_include_tag "application" %>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117400657-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-117400657-2');
+    </script>
+  </head>
+
+  <body>
+    <% if current_teacher %>
+      <div class="sidenav" id="my-sidenav">
+        <ul class="list-unstyled">
+          <a href="javascript:void(0)" id="sidenav-closebtn" class="closebtn" onclick="closeNav()">&times;</a>
+          <li class="<%= active_class('/') %>">
+            <%= link_to "Dashboard", '/' %>
+          </li>
+          <li class="<%= active_class('/sheets/new') %>">
+            <%= link_to "New Objective", '/sheets/new' %>
+          </li>
+          <li class="<%= active_class('/sheets') %>">
+            <%= link_to "Markbook", '/sheets' %>
+          </li>
+          <li class="<%= active_class('/sheets/report') %>">
+            <%= link_to "Assessment", '/sheets/report' %>
+          </li>
+          <li class="<%= active_class('/blank_label') %>">
+            <%= link_to "Blank Labels", '/blank_label' %>
+          </li>
+          <li class="<%= active_class('/subjects') %>">
+            <%= link_to "Classes", '/subjects' %>
+          </li>
+          <li class="<%= active_class('/children') %>">
+            <%= link_to "Children", '/children' %>
+          </li>
+          <% if current_teacher.role == "HeadTeacher" && current_teacher.subscriptions.is_active.first.try(:subscription_type).try(:name) != "Individual Plan" && current_teacher.plan.try(:no_of_users) > 1%>
+            <li class="<%= active_class('/teachers') %>">
+              <%= link_to "Manage Teachers", '/teachers' %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6 left-zero">
+              <ul class="nav navbar-nav navbar-left">
+                <li>
+                  <%#= image_tag("MarkMatelogoB1.png", style: "max-width:100%;height:74px;") %>
+                  <%= link_to(image_tag("MarkMatelogoB1.png", style: "max-width:100%;height:74px;"), "http://www.markmate.co.uk/", style: "padding-bottom:0px; padding-top: 0px;") %>
+                </li>
+                <li class="side-nav-toggle">
+                  <span onclick="openNav()" class="nav-sell">&#9776;</span>
+                  <span class="nav-text">Welcome <%= current_teacher.name.split.map(&:capitalize)*' ' rescue ""%></span>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 right-zero">
+
+              <ul class="nav navbar-nav navbar-right">
+                <% if params[:controller] == "teachers" && params[:action] == "index" && (current_teacher.plan.try(:no_of_users).to_i > 1) %>
+                  <li>
+                    <a>You have used <%= current_teacher.sub_teachers.count %>/<%= current_teacher.plan.no_of_users %> of your teacher accounts.</a>
+                  </li>
+                <% end %>
+                <li>
+                  <%= link_to 'Support', "http://www.markmate.co.uk/support.html", target: :_blank %>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;">Account
+                  <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to 'Profile', edit_teacher_registration_path %></li>
+                    <li><%= link_to "Logout", destroy_teacher_session_path, method: :delete %></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+    <% else %>
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <ul class="nav navbar-nav navbar-right">
+            <%if request.url.include? "admins"%>
+              <li><a href="/admins/sign_in"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <% else %>
+              <li><a href="/teachers/sign_up"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+              <li><a href="/teachers/sign_in"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <% end %>
+          </ul>
+        </div>
+      </nav>
+    <% end %>
+
+    <div class="container">
+      <% flash.each do |name, msg| %>
+        <%= content_tag(:div, class: "alert #{flash_class(name)} flash-message", style: (current_teacher ? 'margin-left: 13%' : ''))  do %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <%= msg %>
+        <% end %>
+      <% end %>
+      <%= yield %>
+    </div>
+  </body>
+</html>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    setTimeout(function(){
+      $('.flash-message').fadeOut();
+    }, 4000);
+  })
+
+  function openNav() {
+    document.getElementById("my-sidenav").style.display = "block";
+  }
+
+  function closeNav() {
+    document.getElementById("my-sidenav").style.display = "none";
+  }
+</script>

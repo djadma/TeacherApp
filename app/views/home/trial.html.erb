@@ -1,0 +1,144 @@
+<div class="row custom-table-position">
+  <div class="well col-md-12 col-sm-12 col-xs-12 reports">
+
+    <div class="col-md-7 col-sm-7 col-xs-7">
+      <div class="test" style="display: none; color: red;">Your current browser is not supported. Please use Google Chrome to activate voice recognition.</div>
+      <%= form_tag sheets_path, :method => "get",:remote=> true do %>
+        <b>List of Subjects</b>
+        <%= select_tag :subject, options_for_select(['ENGLISH', 'MATHS'], 'ENGLISH'),:prompt => "Select Subject", class: 'form-control dummy_subject_id' %><br>
+        <div class="filter-subject">
+          <b>Previous Objectives</b>
+          <%= select_tag :sheet, options_for_select(['I can use fronted adverbials.', 'I can use an embedded clause.']),:prompt => "Select Objective", class: 'form-control sheet_subject_id' %><br>
+        </div>
+      <% end %>
+      <button type="button" class="btn btn-sm" style="float:right;" id="record-btn"><span>Start Speech</span></button>
+      <div class="form-group form-section trail-page-speech-area">
+        <form>
+          <div class="col-md-12">
+            <div class="col-md-10 trial-form">
+              <%= label_tag 'Edward', nil, :class => "control-label label-name" %>
+              <%= text_area_tag :comment, '', class: 'form-control ckeditor2', rows: "5", id: "dictation_test"%>
+            </div>
+            <div class="col-md-2 col-sm-2">
+              <button type="button" class="btn btn-primary print-label" , id="print-label">Print Label</button>
+              <button type="button" class="btn btn-primary print-label clear-label">Clear Label</button>
+              <button type="button" class="btn btn-primary print-label">Save Label</button>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12">
+            <div class="col-sm-4 grade-abr">
+              <% [['Grade 1','1', 'skyblue'], ['Grade 2','2', 'green'], ['Grade 3', '3', 'orange'], ['Grade 4', '4', 'red']].each do |grade| %>
+                <div class="radio radio-margin">
+                  <label><%= radio_button_tag :grade_id , grade[0],false, "data-marks" => grade[1], id: 'grade_id_'+grade[1], onclick: "getGrade('#{grade[0]}', '#{grade[1]}', '#{grade[2]}')","data-grade" => grade[0].downcase, "data-color" => grade[2] %><%= grade[0] %></label>
+                </div>
+              <% end %>
+            </div>
+            <div class="col-md-6 col-sm-6 grade-margin">
+              <h5>Current Grade</h5>
+              <b><%= text_field_tag :marks, "", class: 'form-control text-size', disabled: true %></b>
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-md-5 col-sm-5 col-xs-5 student-list">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr>
+              <% ['Edward', 'William', 'Daniel', 'Thomas', 'Lucy', 'Claire', 'Jessica', 'Michael', 'Laura'].each_slice(9) do |details| %>
+                <td>
+                  <% details.each do |detail| %>
+                    <input type="checkbox" id="detail-id-<%= detail %>" class="multiple-child" onclick="selectMultipleChild('<%= detail %>')" value="<%= detail %>">
+                    <%= link_to detail, '', id: detail, class: "child-name", remote: true %><br>
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  <div style="width:100%;height:0px;position:relative;padding-bottom:56.250%;"><iframe src="https://streamable.com/s/k0987/gaeczu" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe></div>
+    <div>
+      <div class="sign-up-trial-btn">
+        <a href="/teachers/sign_up" class="btn btn-info btn-lg trial-sign-up-button">Sign Up</a>
+      </div>
+      <div>30 Day Free Trial, including</div>
+      <div class="free-printer-text">free label printer</div>
+    </div>
+</div>
+  </div><br>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close close-popup" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+          </button>
+           <h4 class="modal-title" id="memberModalLabel">Thank you for trying Mark Mate.</h4>
+      </div>
+      <div class="modal-body">
+          <p>Full version features
+            <BR>- Customisable Grades.
+            <BR>- Unlimited Classes and Objectives.
+            <BR>- Admin account to manage school teacher accounts.
+            <BR>- Markbook assessment showing grades and feedback.
+            <BR>- Blank label feature to print extension questions during lessons.
+          </p>
+          <p>You will now be shown the trial site.</p>
+          <p><a href="#" class="tooltip-test" title="Example">WATCH AN EXAMPLE</a></p>
+          <div style="width:100%;height:0px;position:relative;padding-bottom:56.250%;" class="stop-vedio"><iframe src="https://streamable.com/s/k0987/gaeczu" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe></div>
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col-md-6 col-xs-6">
+            <div class="trial-free-text">
+            <a href="/teachers/sign_up" class="btn btn-info btn-lg trial-sign-up-button">Sign Up</a>
+            <div class="">30 Day Free Trial, including free label printer</div>
+            <div></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-6">
+            <button type="button" class="btn btn-primary close-popup" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#memberModal').modal('show');
+    if (!annyang) {
+      $('.test').show();
+    }else {
+      $('.test').hide();
+    }
+    $('.close-popup').click(function(e) {
+      e.preventDefault();
+      $(".stop-vedio").children('iframe').attr('src', '');
+    })
+  });
+  function selectMultipleChild(detailID){
+    if ($("#detail-id-"+detailID).is(":checked")){
+      $(".child-name").removeClass('active-child');
+    }
+  }
+
+  function getGrade(name, abr, color){
+
+    if ($("#grade_id_"+abr).is(":checked")) {
+      $(".text-size").val(abr)
+      $(".text-size").css("background-color", color);
+    }
+  }
+  initilize_data()
+
+</script>

@@ -1,0 +1,73 @@
+<style type="text/css">
+  table.secondtable{
+    table-layout: fixed;
+    width: 200px;  
+  }
+  table.firsttable{
+    table-layout: fixed;
+    width: 158px;  
+  }
+.secondtable,th {
+      overflow: hidden;
+      width: 100px;
+      height:100px; 
+      
+
+  }  
+  .firsttable,th {
+      overflow: hidden;
+      width: 100px;
+      height:100px; 
+
+  }  
+
+  .secondtable, td {
+      overflow: hidden;
+      width: 200px;
+      padding: 0 5px 1px !important;
+      font-size: 12px;
+  }   
+</style>
+<%headers = @sheets.map{|sheet| sheet if sheet.name == @children.first.name}.compact%>
+  <div class="col-md-2 col-sm-6 col-xs-6" style="overflow:hidden; padding: 0px !important">
+    <table class="table table-bordered table-striped firsttable">
+      <thead>
+        <div>
+          <th style="font-size:10px"><b>Name</b></th>
+        </div>
+      </thead>
+      <tbody>
+        <%@children.each do |child|%>
+          <%list = @sheets.map{|sheet| sheet if sheet.name == child.name}.compact%>
+          <tr>
+            <td><%= list.first.name.truncate(23) rescue nil%></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-10 col-sm-6 col-xs-6" style="padding: 0px !important">
+    <div class="table-responsive table-hover ">
+      <table class="table table-bordered table-striped objective-report-table secondtable">
+       <thead>
+          <% headers.each do |sheet| %>
+            <th style="font-size:10px; text-align: center;"><b><%= sheet.title.truncate(67) %></b></th>
+          <% end %>
+        </thead>
+        <tbody>
+          <%@children.each do |child|%>
+            <%list = @sheets.map{|sheet| sheet if sheet.name == child.name}.compact%>
+            <tr>
+              <% list.each do |sheet| %>
+                <td style="text-align: center; background: <%= sheet.color%>">
+                  <div data-original-title="<%= sheet.sanitize_comment %>" data-toggle="tooltip">
+                    <%= sheet.grade_name.present? ? sheet.grade_name : 'None' %>
+                  </div>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>

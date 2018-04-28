@@ -1,0 +1,62 @@
+<%#= f.fields_for :students do |builder| %>
+  <%#= render 'student_fields', f: builder %>
+<%# end %>
+
+<% if @details.present? %>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <tbody>
+        <tr>
+          Select All <input type="checkbox" id="ckbCheckAll" />
+          <% @details.each_slice(20) do |details| %>
+            <td>
+              <% details.each do |detail| %>
+                <input type="checkbox" id="detail-id-<%= detail.id %>" class="multiple-child" onclick="selectMultipleChild(<%= detail.id %>)" value="<%= detail.id %>">
+                <% color = detail.comment.present? ? "color:green" : "color:red"%>
+                <%= link_to detail.child.name.capitalize, child_detail_sheet_path(@sheet, detail: detail.id), remote: true, class: "child-name color-#{detail.id}", id: detail.child.name, style: "#{color}" %><br>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+
+  $("#ckbCheckAll").click(function () {
+    if ($("#ckbCheckAll").is(':checked')) {
+      $(".table input[type=checkbox]").each(function () {
+        $(this).prop("checked", true);
+        selectMultipleChild(this.value)
+      });
+
+    } else {
+      $(".table input[type=checkbox]").each(function () {
+        $(this).prop("checked", false);
+      });
+    }
+  });
+
+  $(document).ready(function(){
+    $('.child-name').first().addClass('active-child');
+  })
+
+  $(this).addClass('active-child');
+  $('.child-name').on('click', function(){
+    $(".child-name").removeClass('active-child');
+    $(this).addClass('active-child');
+  });
+
+  function selectMultipleChild(detailID){
+    if ($("#detail-id-"+detailID).is(":checked")){
+      $('.multiselect-child-ids').append("<input type='hidden' name='detail_ids[]'" + "value='" + detailID + "' >")
+      $(".child-name").removeClass('active-child');
+    }
+    else{
+      $('input[type="hidden"][value="'+detailID+'"][name="detail_ids[]"]').remove()
+    }
+  }
+  
+</script>

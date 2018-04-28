@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MarkMate</title>
+    <%= favicon_link_tag 'favicon-32x32.png' %>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application'%>
+    <%= javascript_include_tag "application" %>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117400657-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-117400657-2');
+    </script>
+  </head>
+
+  <body>
+  	<div class="sidenav" id="my-sidenav">
+      <ul class="list-unstyled">
+        <a href="javascript:void(0)" id="sidenav-closebtn" class="closebtn" onclick="closeNav()">&times;</a>
+        <li class="">
+          <a>Dashboard</a>
+        </li>
+        <li class="">
+          <a>New Objective</a>
+        </li>
+        <li class="active">
+          <a>Markbook</a>
+        </li>
+        <li class="">
+          <a>Assessment</a>
+        </li>
+        <li class="">
+          <a>Blank Labels</a>
+        </li>
+        <li class="">
+          <a>Classes</a>
+        </li>
+        <li class="">
+          <a>Children</a>
+        </li>
+
+        <li class="">
+          <a>Manage Teachers</a>
+        </li>
+      </ul>
+    </div>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6 left-zero">
+            <ul class="nav navbar-nav navbar-left">
+              <li>
+                <%= link_to(image_tag("MarkMatelogoB1.png", style: "max-width:100%;height:74px;"), "http://www.markmate.co.uk/", style: "padding-bottom:0px; padding-top: 0px;") %>
+              </li>
+              <li class="side-nav-toggle">
+                <span onclick="openNav()" class="nav-sell">&#9776;</span>
+                <span class="nav-text">Welcome Mr Smith</span>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-6 right-zero">
+
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <%= link_to 'Support', "http://www.markmate.co.uk/support.html", target: :_blank %>
+              </li>
+              <li><a href="/teachers/sign_up"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;">Account
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li>Profile</li>
+                  <li>Logout</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+    	<%= yield %>
+    </div>
+  </body>
+
+</html>
+
+<script type="text/javascript">
+  function openNav() {
+    document.getElementById("my-sidenav").style.display = "block";
+  }
+
+  function closeNav() {
+    document.getElementById("my-sidenav").style.display = "none";
+  }
+</script>
